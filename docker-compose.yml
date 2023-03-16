@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  react_the_complete_guide:
+    build:
+      context: .
+    container_name: react_the_complete_guide
+    ports:
+      - 3000:3000
+    tty: true
+    volumes:
+      - .:/workdir
