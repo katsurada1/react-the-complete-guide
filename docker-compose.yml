@@ -6,7 +6,7 @@ services:
       context: .
     container_name: react_the_complete_guide
     ports:
-      - 3000:3000
+      - 3004:3000
     tty: true
     volumes:
       - .:/workdir
