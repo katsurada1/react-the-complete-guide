@@ -1,56 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef();
-  const [enteredName, setEnterdName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  const [enteredName, setEnteredName] = useState('');
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  useEffect(() => {
-    if (enteredNameIsValid) {
-      console.log('Name Input is valid');
-    }
-  }, [enteredNameIsValid]);
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
-  const nameInputChanegeHandler = (event) => {
-    setEnterdName(event.target.value);
+  const nameInputChangeHandler = (event) => {
+    setEnteredName(event.target.value);
   };
 
-  const formSunmissionHandler = (event) => {
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+  };
+
+  const formSubmissionHandler = (event) => {
     event.preventDefault();
 
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
 
-    setEnteredNameIsValid(true);
-
     console.log(enteredName);
 
-    const enteredValue = nameInputRef.current.value;
-    console.log(enteredValue);
-
-    setEnterdName('');
+    // nameInputRef.current.value = ''; => NOT IDEAL, DON'T MANIPULATE THE DOM
+    setEnteredName('');
+    setEnteredNameTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? 'form-control invalid'
     : 'form-control';
 
   return (
-    <form onSubmit={formSunmissionHandler}>
+    <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
-          onChange={nameInputChanegeHandler}
           type="text"
           id="name"
+          onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {nameInputIsInvalid && (
